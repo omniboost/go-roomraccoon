@@ -140,3 +140,27 @@ func (r *BookingsGet) Do() (BookingsGetResponseBody, error) {
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
 }
+
+func (r *BookingsGet) All() (BookingsGetResponseBody, error) {
+	response := *r.NewResponseBody()
+	for {
+		resp, err := r.Do()
+		if err != nil {
+			return resp, err
+		}
+
+		// Break out of loop when no bookings are found
+		if len(resp.Data) == 0 {
+			break
+		}
+
+		// Add bookings to list
+		response.Data = append(response.Data, resp.Data...)
+
+		if response.Meta.Pagination.CurrentPage == response.Meta.Pagination.TotalPages {
+			break
+		}
+	}
+
+	return response, nil
+}
