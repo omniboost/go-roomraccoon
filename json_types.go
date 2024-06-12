@@ -21,6 +21,14 @@ func (d DateTime) MarshalSchema() string {
 	return d.Time.Format(time.RFC3339)
 }
 
+func (d *Date) MarshalJSON() ([]byte, error) {
+	if d.Time.IsZero() {
+		return json.Marshal(nil)
+	}
+
+	return json.Marshal(d.Time.Format("2006-01-02 15:04:05"))
+}
+
 func (d *DateTime) UnmarshalJSON(text []byte) (err error) {
 	var value string
 	err = json.Unmarshal(text, &value)
