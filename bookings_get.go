@@ -38,6 +38,8 @@ type BookingsGetQueryParams struct {
 	Status []string `schema:"status,omitempty"`
 	Start  Date     `schema:"period[start],omitempty"`
 	End    Date     `schema:"period[end],omitempty"`
+	Limit  int      `schema:"limit,omitempty"`
+	Page   int      `schema:"page,omitempty"`
 }
 
 func (p BookingsGetQueryParams) ToURLValues() (url.Values, error) {
@@ -144,12 +146,13 @@ func (r *BookingsGet) Do() (BookingsGetResponseBody, error) {
 	return *responseBody, err
 }
 
-func (r *BookingsGet) All() (BookingsGetResponseBody, error) {
+func (r *BookingsGet) All() (Bookings, error) {
+	bookings := Bookings{}
 	response := *r.NewResponseBody()
 	for {
 		resp, err := r.Do()
 		if err != nil {
-			return resp, err
+			return bookings, err
 		}
 
 		// Break out of loop when no bookings are found
@@ -158,12 +161,15 @@ func (r *BookingsGet) All() (BookingsGetResponseBody, error) {
 		}
 
 		// Add bookings to list
-		response.Data = append(response.Data, resp.Data...)
+		bookings = append(bookings, resp.Data...)
 
 		if response.Meta.Pagination.CurrentPage == response.Meta.Pagination.TotalPages {
 			break
 		}
+
+		// Increment page number
+		r.QueryParams().Page = response.Meta.Pagination.CurrentPage + 1
 	}
 
-	return response, nil
+	return bookings, nil
 }
