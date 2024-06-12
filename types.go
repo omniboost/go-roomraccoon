@@ -98,3 +98,55 @@ type Arrangement struct {
 }
 
 type Arrangements []Arrangement
+
+type Space struct {
+	ID          int    `json:"id"`
+	Category    string `json:"category"`
+	Component   string `json:"component"`
+	Title       string `json:"title"`
+	Description string `json:"description,omitempty"`
+	EventTypes  string `json:"event_types"`
+	Pricing     struct {
+		Hour struct {
+			Excluded int `json:"excluded"`
+			Included int `json:"included"`
+		} `json:"hour"`
+		Day struct {
+			Excluded int `json:"excluded"`
+			Included int `json:"included"`
+		} `json:"day"`
+		Daypart struct {
+			Excluded int `json:"excluded"`
+			Included int `json:"included"`
+		} `json:"daypart"`
+		TaxPercentage int    `json:"tax_percentage"`
+		Type          string `json:"type"`
+		Min           int    `json:"min"`
+	} `json:"pricing"`
+	Images     []string `json:"images"`
+	Facilities []any    `json:"facilities"`
+	Capacity   struct {
+		Max int `json:"max"`
+		Min int `json:"min"`
+	} `json:"capacity"`
+	Equipment []struct {
+		ID          int    `json:"id"`
+		Title       string `json:"title"`
+		Category    any    `json:"category"`
+		Component   any    `json:"component"`
+		Description any    `json:"description"`
+		Activated   any    `json:"activated"`
+	} `json:"equipment"`
+	Venue struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"venue"`
+	Setups []struct {
+		Label string `json:"label"`
+		Min   int    `json:"min"`
+		Max   int    `json:"max"`
+	} `json:"setups"`
+	LinkedSpaces []any `json:"linked_spaces"`
+}
+
+type Spaces []Space
