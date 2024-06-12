@@ -8,8 +8,8 @@ import (
 	"testing"
 )
 
-func TestVenueProducts(t *testing.T) {
-	req := client.NewVenueProducts()
+func TestVenueSpacesGet(t *testing.T) {
+	req := client.NewVenueSpacesGet()
 	venueID, err := strconv.Atoi(os.Getenv("VENUE_ID"))
 	if err != nil {
 		t.Error(err)

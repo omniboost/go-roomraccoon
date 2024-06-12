@@ -9,8 +9,8 @@ import (
 	"github.com/omniboost/go-venuesuite/utils"
 )
 
-func (c *Client) NewVenueSpaces() VenueSpaces {
-	r := VenueSpaces{
+func (c *Client) NewVenueSpacesGet() VenueSpacesGet {
+	r := VenueSpacesGet{
 		client:  c,
 		method:  http.MethodGet,
 		headers: http.Header{},
@@ -22,23 +22,23 @@ func (c *Client) NewVenueSpaces() VenueSpaces {
 	return r
 }
 
-type VenueSpaces struct {
+type VenueSpacesGet struct {
 	client      *Client
-	queryParams *VenueSpacesQueryParams
-	pathParams  *VenueSpacesPathParams
+	queryParams *VenueSpacesGetQueryParams
+	pathParams  *VenueSpacesGetPathParams
 	method      string
 	headers     http.Header
-	requestBody VenueSpacesBody
+	requestBody VenueSpacesGetBody
 }
 
-func (r VenueSpaces) NewQueryParams() *VenueSpacesQueryParams {
-	return &VenueSpacesQueryParams{}
+func (r VenueSpacesGet) NewQueryParams() *VenueSpacesGetQueryParams {
+	return &VenueSpacesGetQueryParams{}
 }
 
-type VenueSpacesQueryParams struct {
+type VenueSpacesGetQueryParams struct {
 }
 
-func (p VenueSpacesQueryParams) ToURLValues() (url.Values, error) {
+func (p VenueSpacesGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
 	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
@@ -52,71 +52,71 @@ func (p VenueSpacesQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *VenueSpaces) QueryParams() QueryParams {
+func (r *VenueSpacesGet) QueryParams() QueryParams {
 	return r.queryParams
 }
 
-func (r VenueSpaces) NewPathParams() *VenueSpacesPathParams {
-	return &VenueSpacesPathParams{}
+func (r VenueSpacesGet) NewPathParams() *VenueSpacesGetPathParams {
+	return &VenueSpacesGetPathParams{}
 }
 
-type VenueSpacesPathParams struct {
+type VenueSpacesGetPathParams struct {
 	VenueID int `schema:"venue_id"`
 }
 
-func (p *VenueSpacesPathParams) Params() map[string]string {
+func (p *VenueSpacesGetPathParams) Params() map[string]string {
 	return map[string]string{
 		"venue_id": strconv.Itoa(p.VenueID),
 	}
 }
 
-func (r *VenueSpaces) PathParams() *VenueSpacesPathParams {
+func (r *VenueSpacesGet) PathParams() *VenueSpacesGetPathParams {
 	return r.pathParams
 }
 
-func (r *VenueSpaces) PathParamsInterface() PathParams {
+func (r *VenueSpacesGet) PathParamsInterface() PathParams {
 	return r.pathParams
 }
 
-func (r *VenueSpaces) SetMethod(method string) {
+func (r *VenueSpacesGet) SetMethod(method string) {
 	r.method = method
 }
 
-func (r *VenueSpaces) Method() string {
+func (r *VenueSpacesGet) Method() string {
 	return r.method
 }
 
-func (r VenueSpaces) NewRequestBody() VenueSpacesBody {
-	return VenueSpacesBody{}
+func (r VenueSpacesGet) NewRequestBody() VenueSpacesGetBody {
+	return VenueSpacesGetBody{}
 }
 
-type VenueSpacesBody struct {
+type VenueSpacesGetBody struct {
 }
 
-func (r *VenueSpaces) RequestBody() *VenueSpacesBody {
+func (r *VenueSpacesGet) RequestBody() *VenueSpacesGetBody {
 	return nil
 }
 
-func (r *VenueSpaces) RequestBodyInterface() interface{} {
+func (r *VenueSpacesGet) RequestBodyInterface() interface{} {
 	return nil
 }
 
-func (r *VenueSpaces) SetRequestBody(body VenueSpacesBody) {
+func (r *VenueSpacesGet) SetRequestBody(body VenueSpacesGetBody) {
 	r.requestBody = body
 }
 
-func (r *VenueSpaces) NewResponseBody() *VenueSpacesResponseBody {
-	return &VenueSpacesResponseBody{}
+func (r *VenueSpacesGet) NewResponseBody() *VenueSpacesGetResponseBody {
+	return &VenueSpacesGetResponseBody{}
 }
 
-type VenueSpacesResponseBody Spaces
+type VenueSpacesGetResponseBody Spaces
 
-func (r *VenueSpaces) URL() *url.URL {
+func (r *VenueSpacesGet) URL() *url.URL {
 	u := r.client.GetEndpointURL("/venues/{{.venue_id}}/spaces", r.PathParams())
 	return &u
 }
 
-func (r *VenueSpaces) Do() (VenueSpacesResponseBody, error) {
+func (r *VenueSpacesGet) Do() (VenueSpacesGetResponseBody, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {

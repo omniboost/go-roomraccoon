@@ -9,8 +9,8 @@ import (
 	"github.com/omniboost/go-venuesuite/utils"
 )
 
-func (c *Client) NewVenueProducts() VenueProducts {
-	r := VenueProducts{
+func (c *Client) NewVenueProductsGet() VenueProductsGet {
+	r := VenueProductsGet{
 		client:  c,
 		method:  http.MethodGet,
 		headers: http.Header{},
@@ -22,23 +22,23 @@ func (c *Client) NewVenueProducts() VenueProducts {
 	return r
 }
 
-type VenueProducts struct {
+type VenueProductsGet struct {
 	client      *Client
-	queryParams *VenueProductsQueryParams
-	pathParams  *VenueProductsPathParams
+	queryParams *VenueProductsGetQueryParams
+	pathParams  *VenueProductsGetPathParams
 	method      string
 	headers     http.Header
-	requestBody VenueProductsBody
+	requestBody VenueProductsGetBody
 }
 
-func (r VenueProducts) NewQueryParams() *VenueProductsQueryParams {
-	return &VenueProductsQueryParams{}
+func (r VenueProductsGet) NewQueryParams() *VenueProductsGetQueryParams {
+	return &VenueProductsGetQueryParams{}
 }
 
-type VenueProductsQueryParams struct {
+type VenueProductsGetQueryParams struct {
 }
 
-func (p VenueProductsQueryParams) ToURLValues() (url.Values, error) {
+func (p VenueProductsGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
 	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
@@ -52,71 +52,71 @@ func (p VenueProductsQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *VenueProducts) QueryParams() QueryParams {
+func (r *VenueProductsGet) QueryParams() QueryParams {
 	return r.queryParams
 }
 
-func (r VenueProducts) NewPathParams() *VenueProductsPathParams {
-	return &VenueProductsPathParams{}
+func (r VenueProductsGet) NewPathParams() *VenueProductsGetPathParams {
+	return &VenueProductsGetPathParams{}
 }
 
-type VenueProductsPathParams struct {
+type VenueProductsGetPathParams struct {
 	VenueID int `schema:"venue_id"`
 }
 
-func (p *VenueProductsPathParams) Params() map[string]string {
+func (p *VenueProductsGetPathParams) Params() map[string]string {
 	return map[string]string{
 		"venue_id": strconv.Itoa(p.VenueID),
 	}
 }
 
-func (r *VenueProducts) PathParams() *VenueProductsPathParams {
+func (r *VenueProductsGet) PathParams() *VenueProductsGetPathParams {
 	return r.pathParams
 }
 
-func (r *VenueProducts) PathParamsInterface() PathParams {
+func (r *VenueProductsGet) PathParamsInterface() PathParams {
 	return r.pathParams
 }
 
-func (r *VenueProducts) SetMethod(method string) {
+func (r *VenueProductsGet) SetMethod(method string) {
 	r.method = method
 }
 
-func (r *VenueProducts) Method() string {
+func (r *VenueProductsGet) Method() string {
 	return r.method
 }
 
-func (r VenueProducts) NewRequestBody() VenueProductsBody {
-	return VenueProductsBody{}
+func (r VenueProductsGet) NewRequestBody() VenueProductsGetBody {
+	return VenueProductsGetBody{}
 }
 
-type VenueProductsBody struct {
+type VenueProductsGetBody struct {
 }
 
-func (r *VenueProducts) RequestBody() *VenueProductsBody {
+func (r *VenueProductsGet) RequestBody() *VenueProductsGetBody {
 	return nil
 }
 
-func (r *VenueProducts) RequestBodyInterface() interface{} {
+func (r *VenueProductsGet) RequestBodyInterface() interface{} {
 	return nil
 }
 
-func (r *VenueProducts) SetRequestBody(body VenueProductsBody) {
+func (r *VenueProductsGet) SetRequestBody(body VenueProductsGetBody) {
 	r.requestBody = body
 }
 
-func (r *VenueProducts) NewResponseBody() *VenueProductsResponseBody {
-	return &VenueProductsResponseBody{}
+func (r *VenueProductsGet) NewResponseBody() *VenueProductsGetResponseBody {
+	return &VenueProductsGetResponseBody{}
 }
 
-type VenueProductsResponseBody Products
+type VenueProductsGetResponseBody Products
 
-func (r *VenueProducts) URL() *url.URL {
+func (r *VenueProductsGet) URL() *url.URL {
 	u := r.client.GetEndpointURL("/venues/{{.venue_id}}/products", r.PathParams())
 	return &u
 }
 
-func (r *VenueProducts) Do() (VenueProductsResponseBody, error) {
+func (r *VenueProductsGet) Do() (VenueProductsGetResponseBody, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
