@@ -2,17 +2,18 @@ package venuesuite_test
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"testing"
 )
 
-func TestSalesOrderBasicV2Post(t *testing.T) {
-	req := client.NewSalesOrderBasicV2Post()
+func TestUsersMe(t *testing.T) {
+	req := client.NewUsersMe()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
 	}
 
 	b, _ := json.MarshalIndent(resp, "", "  ")
-	log.Println(string(b))
+	fmt.Println(string(b))
 }
+

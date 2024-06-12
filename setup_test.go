@@ -1,14 +1,12 @@
 package venuesuite_test
 
 import (
-	"context"
 	"log"
 	"net/url"
 	"os"
 	"testing"
 
 	venuesuite "github.com/omniboost/go-venuesuite"
-	"golang.org/x/oauth2"
 )
 
 var (
@@ -17,40 +15,13 @@ var (
 
 func TestMain(m *testing.M) {
 	baseURLString := os.Getenv("BASE_URL")
-	clientID := os.Getenv("CLIENT_ID")
-	clientSecret := os.Getenv("CLIENT_SECRET")
-	accessToken := os.Getenv("ACCESS_TOKEN")
-	refreshToken := os.Getenv("REFRESH_TOKEN")
-	companyID := os.Getenv("COMPANY_ID")
-	applicationType := os.Getenv("APPLICATION_TYPE")
-	tokenURL := os.Getenv("TOKEN_URL")
+	user := os.Getenv("VENUESUITE_USER")
+	password := os.Getenv("VENUESUITE_PASSWORD")
 	debug := os.Getenv("DEBUG")
 
-	oauthConfig := venuesuite.NewOauth2Config()
-	oauthConfig.ClientID = clientID
-	oauthConfig.ClientSecret = clientSecret
-
-	// set alternative token url
-	if tokenURL != "" {
-		oauthConfig.Endpoint.TokenURL = tokenURL
-	}
-
-	token := &oauth2.Token{
-		RefreshToken: refreshToken,
-		AccessToken:  accessToken,
-		// Expiry:       time.Now().AddDate(0, 0, 1),
-	}
-
-	// get http client with automatic oauth logic
-	httpClient := oauthConfig.Client(context.Background(), token)
-
-	client = venuesuite.NewClient(httpClient)
-	if companyID != "" {
-		client.SetCompanyID(companyID)
-	}
-	if applicationType != "" {
-		client.SetApplicationType(applicationType)
-	}
+	client = venuesuite.NewClient(nil)
+	client.SetUser(user)
+	client.SetPassword(password)
 	if debug != "" {
 		client.SetDebug(true)
 	}

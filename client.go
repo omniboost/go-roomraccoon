@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -28,8 +27,8 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "integration.venuesuite",
-		Path:   "/API/",
+		Host:   "api-vms.qa.venuesuite.com",
+		Path:   "",
 	}
 )
 
@@ -60,9 +59,9 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	accessToken     string
-	companyID       string
-	applicationType string
+	user     string
+	password string
+	token    string
 
 	// User agent for client
 	userAgent string
@@ -93,28 +92,20 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-func (c Client) AccessToken() string {
-	return c.accessToken
+func (c Client) User() string {
+	return c.user
 }
 
-func (c *Client) SetAccessToken(accessToken string) {
-	c.accessToken = accessToken
+func (c *Client) SetUser(user string) {
+	c.user = user
 }
 
-func (c Client) CompanyID() string {
-	return c.companyID
+func (c Client) Password() string {
+	return c.password
 }
 
-func (c *Client) SetCompanyID(companyID string) {
-	c.companyID = companyID
-}
-
-func (c Client) ApplicationType() string {
-	return c.applicationType
-}
-
-func (c *Client) SetApplicationType(applicationType string) {
-	c.applicationType = applicationType
+func (c *Client) SetPassword(password string) {
+	c.password = password
 }
 
 func (c Client) BaseURL() url.URL {
@@ -222,13 +213,6 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
 	r.Header.Add("Accept", c.MediaType())
 	r.Header.Add("User-Agent", c.UserAgent())
-	r.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.AccessToken()))
-	if c.CompanyID() != "" {
-		r.Header.Add("ipp-company-id", c.CompanyID())
-	}
-	if c.ApplicationType() != "" {
-		r.Header.Add("ipp-application-type", c.ApplicationType())
-	}
 
 	return r, nil
 }
@@ -267,12 +251,6 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		log.Println(string(dump))
 	}
 
-	// check if the response isn't an error
-	err = CheckResponse(httpResp)
-	if err != nil {
-		return httpResp, err
-	}
-
 	// check the provided interface parameter
 	if httpResp == nil {
 		return httpResp, nil
@@ -286,56 +264,51 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		return httpResp, nil
 	}
 
-	errResp := &ErrorResponse{Response: httpResp}
-	exResp := &ExceptionResponse{Response: httpResp}
-	err = c.Unmarshal(httpResp.Body, body, errResp, exResp)
+	status := &StatusResponse{Response: httpResp}
+	// exResp := &ExceptionResponse{Response: httpResp}
+	err = c.Unmarshal(httpResp.Body, []any{body}, []any{status})
 	if err != nil {
 		return httpResp, err
 	}
 
-	if errResp.Message != "" {
-		return httpResp, errResp
+	if status.Error() != "" {
+		return httpResp, status
 	}
 
-	if exResp.ExceptionMessage != "" {
-		return httpResp, exResp
+	// check if the response isn't an error
+	err = CheckResponse(httpResp)
+	if err != nil {
+		return httpResp, err
 	}
 
 	return httpResp, nil
 }
 
-func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
-	if len(vv) == 0 {
+func (c *Client) Unmarshal(r io.Reader, vv []interface{}, optionalVv []interface{}) error {
+	if len(vv) == 0 && len(optionalVv) == 0 {
 		return nil
 	}
 
-	b, err := ioutil.ReadAll(r)
+	b, err := io.ReadAll(r)
 	if err != nil {
 		return err
 	}
 
-	errs := []error{}
 	for _, v := range vv {
 		r := bytes.NewReader(b)
 		dec := json.NewDecoder(r)
-		if c.disallowUnknownFields {
-			dec.DisallowUnknownFields()
-		}
 
 		err := dec.Decode(v)
 		if err != nil && err != io.EOF {
-			errs = append(errs, err)
+			return errors.WithStack((err))
 		}
-
 	}
 
-	if len(errs) == len(vv) {
-		// Everything errored
-		msgs := make([]string, len(errs))
-		for i, e := range errs {
-			msgs[i] = fmt.Sprint(e)
-		}
-		return errors.New(strings.Join(msgs, ", "))
+	for _, v := range optionalVv {
+		r := bytes.NewReader(b)
+		dec := json.NewDecoder(r)
+
+		_ = dec.Decode(v)
 	}
 
 	return nil
@@ -360,8 +333,8 @@ func CheckResponse(r *http.Response) error {
 	}
 
 	// read data and copy it back
-	data, err := ioutil.ReadAll(r.Body)
-	r.Body = ioutil.NopCloser(bytes.NewReader(data))
+	data, err := io.ReadAll(r.Body)
+	r.Body = io.NopCloser(bytes.NewReader(data))
 	if err != nil {
 		return errorResponse
 	}
@@ -390,19 +363,21 @@ func CheckResponse(r *http.Response) error {
 	return nil
 }
 
-type ExceptionResponse struct {
+type StatusResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response
 
-	ExceptionType      string `json:"ExceptionType"`
-	ExceptionMessage   string `json:"ExceptionMessage"`
-	ExceptionFaultCode string `json:"ExceptionFaultCode"`
-	ExceptionMessageID string `json:"ExceptionMessageID"`
-	ExceptionDetails   string `json:"ExceptionDetails"`
+	Status  int    `json:"status"`
+	Msg     string `json:"msg"`
+	Message string `json:"message"`
 }
 
-func (r *ExceptionResponse) Error() string {
-	return r.ExceptionMessage
+func (r *StatusResponse) Error() string {
+	if r.Status != 0 && (r.Status < 200 || r.Status > 299) {
+		return fmt.Sprintf("Status %d: %s %s", r.Status, r.Msg, r.Message)
+	}
+
+	return ""
 }
 
 type ErrorResponse struct {
@@ -424,4 +399,18 @@ func checkContentType(response *http.Response) error {
 	}
 
 	return nil
+}
+
+func (c Client) Token() (string, error) {
+	if c.token == "" {
+		// retrieve token
+		req := c.NewAuthPost()
+		resp, err := req.Do()
+		if err != nil {
+			return "", err
+		}
+		c.token = resp.Token
+	}
+
+	return c.token, nil
 }
