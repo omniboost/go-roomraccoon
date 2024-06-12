@@ -35,6 +35,8 @@ func (r BookingsGet) NewQueryParams() *BookingsGetQueryParams {
 }
 
 type BookingsGetQueryParams struct {
+	Start Date `schema:"period[start]"`
+	End   Date `schema:"period[end]"`
 }
 
 func (p BookingsGetQueryParams) ToURLValues() (url.Values, error) {
@@ -51,7 +53,7 @@ func (p BookingsGetQueryParams) ToURLValues() (url.Values, error) {
 	return params, nil
 }
 
-func (r *BookingsGet) QueryParams() QueryParams {
+func (r *BookingsGet) QueryParams() *BookingsGetQueryParams {
 	return r.queryParams
 }
 
