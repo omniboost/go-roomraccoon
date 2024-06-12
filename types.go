@@ -50,3 +50,51 @@ type Product struct {
 }
 
 type Products []Product
+
+type Arrangement struct {
+	ID            int      `json:"id"`
+	Title         string   `json:"title"`
+	Type          string   `json:"type"`
+	Description   string   `json:"description,omitempty"`
+	Category      string   `json:"category"`
+	Component     string   `json:"component"`
+	Images        []string `json:"images,omitempty"`
+	Weight        int      `json:"weight"`
+	Duration      int      `json:"duration"`
+	Spaces        []string `json:"spaces"`
+	MinimumGuests int      `json:"minimum_guests"`
+	MaximumGuests int      `json:"maximum_guests"`
+	Products      struct {
+		Catering []struct {
+			ID          int      `json:"id"`
+			Title       string   `json:"title"`
+			Category    string   `json:"category"`
+			Component   string   `json:"component"`
+			Gradation   any      `json:"gradation"`
+			Description string   `json:"description,omitempty"`
+			Images      []string `json:"images,omitempty"`
+			Pricing     struct {
+				Unit          string `json:"unit"`
+				Included      int    `json:"included"`
+				Excluded      int    `json:"excluded"`
+				TaxPercentage int    `json:"tax_percentage"`
+			} `json:"pricing"`
+			Activated any    `json:"activated"`
+			Type      string `json:"type"`
+			Quantity  int    `json:"quantity"`
+		} `json:"catering"`
+		Equipment []any `json:"equipment"`
+	} `json:"products"`
+	Pricing []struct {
+		Excluded      int    `json:"excluded"`
+		Included      int    `json:"included"`
+		TaxPercentage int    `json:"tax_percentage"`
+		Unit          string `json:"unit"`
+	} `json:"pricing"`
+	Discounts           any  `json:"discounts"`
+	SpacePriceIncluded  bool `json:"space_price_included"`
+	SpaceAlwaysIncluded int  `json:"space_always_included"`
+	Activated           int  `json:"activated"`
+}
+
+type Arrangements []Arrangement
