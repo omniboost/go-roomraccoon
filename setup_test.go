@@ -1,4 +1,4 @@
-package vismanet_test
+package venuesuite_test
 
 import (
 	"context"
@@ -7,12 +7,12 @@ import (
 	"os"
 	"testing"
 
-	vismanet "github.com/omniboost/go-visma.net"
+	venuesuite "github.com/omniboost/go-venuesuite"
 	"golang.org/x/oauth2"
 )
 
 var (
-	client *vismanet.Client
+	client *venuesuite.Client
 )
 
 func TestMain(m *testing.M) {
@@ -26,7 +26,7 @@ func TestMain(m *testing.M) {
 	tokenURL := os.Getenv("TOKEN_URL")
 	debug := os.Getenv("DEBUG")
 
-	oauthConfig := vismanet.NewOauth2Config()
+	oauthConfig := venuesuite.NewOauth2Config()
 	oauthConfig.ClientID = clientID
 	oauthConfig.ClientSecret = clientSecret
 
@@ -44,7 +44,7 @@ func TestMain(m *testing.M) {
 	// get http client with automatic oauth logic
 	httpClient := oauthConfig.Client(context.Background(), token)
 
-	client = vismanet.NewClient(httpClient)
+	client = venuesuite.NewClient(httpClient)
 	if companyID != "" {
 		client.SetCompanyID(companyID)
 	}

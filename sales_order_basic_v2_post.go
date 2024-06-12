@@ -1,10 +1,10 @@
-package vismanet
+package venuesuite
 
 import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-visma.net/utils"
+	"github.com/omniboost/go-venuesuite/utils"
 )
 
 func (c *Client) NewSalesOrderBasicV2Post() SalesOrderBasicV2Post {

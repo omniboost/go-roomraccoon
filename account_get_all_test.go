@@ -1,4 +1,4 @@
-package vismanet_test
+package venuesuite_test
 
 import (
 	"encoding/json"

@@ -1,11 +1,11 @@
-package vismanet
+package venuesuite
 
 import (
 	"encoding/json"
 	"time"
 
 	"github.com/cydev/zero"
-	"github.com/omniboost/go-visma.net/omitempty"
+	"github.com/omniboost/go-venuesuite/omitempty"
 )
 
 type Accounts []Account

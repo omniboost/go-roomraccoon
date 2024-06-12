@@ -1,22 +1,22 @@
-package vismanet_test
+package venuesuite_test
 
 import (
 	"encoding/json"
 	"log"
 	"testing"
 
-	vismanet "github.com/omniboost/go-visma.net"
+	venuesuite "github.com/omniboost/go-venuesuite"
 )
 
 func TestValueString(t *testing.T) {
-	// t1 := vismanet.ValueString("")
+	// t1 := venuesuite.ValueString("")
 	// b, err := json.Marshal(t1)
 	// if err != nil {
 	// 	t.Error(err)
 	// }
 	// log.Println(string(b))
 
-	// var t2 *vismanet.ValueString
+	// var t2 *venuesuite.ValueString
 	// b, err = json.Marshal(t2)
 	// if err != nil {
 	// 	t.Error(err)
@@ -27,7 +27,7 @@ func TestValueString(t *testing.T) {
 	// 	{"T": null}
 	// `)
 	// t3 := struct {
-	// 	T *vismanet.ValueString
+	// 	T *venuesuite.ValueString
 	// }{}
 	// err = json.Unmarshal(b, &t3)
 	// if err != nil {
@@ -39,16 +39,16 @@ func TestValueString(t *testing.T) {
 	// }
 	// log.Println(string(b))
 
-	t1 := vismanet.ValueNullString{nil}
+	t1 := venuesuite.ValueNullString{nil}
 	b, err := json.Marshal(t1)
 	if err != nil {
 		t.Error(err)
 	}
 	log.Println(string(b))
 
-	var s vismanet.ValueString
+	var s venuesuite.ValueString
 	s = ""
-	t1 = vismanet.ValueNullString{&s}
+	t1 = venuesuite.ValueNullString{&s}
 	b, err = json.Marshal(t1)
 	if err != nil {
 		t.Error(err)
