@@ -22,3 +22,10 @@ type User struct {
 		Locale         string `json:"locale"`
 	} `json:"detail"`
 }
+
+type Venue struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+type Venues []Venue
