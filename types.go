@@ -256,21 +256,22 @@ type BookingSlot struct {
 		Description any    `json:"description"`
 		EventTypes  string `json:"event_types"`
 		Pricing     struct {
-			Hour struct {
-				Excluded float64 `json:"excluded"`
-				Included float64 `json:"included"`
-			} `json:"hour"`
-			Day struct {
-				Excluded float64 `json:"excluded"`
-				Included float64 `json:"included"`
-			} `json:"day"`
-			Daypart struct {
-				Excluded float64 `json:"excluded"`
-				Included float64 `json:"included"`
-			} `json:"daypart"`
-			TaxPercentage string `json:"tax_percentage"`
-			Type          string `json:"type"`
-			Min           int    `json:"min"`
+			// @TODO: add extra unmarshal method
+			// Hour struct {
+			// 	Excluded float64 `json:"excluded"`
+			// 	Included float64 `json:"included"`
+			// } `json:"hour"`
+			// Day struct {
+			// 	Excluded float64 `json:"excluded"`
+			// 	Included float64 `json:"included"`
+			// } `json:"day"`
+			// Daypart struct {
+			// 	Excluded float64 `json:"excluded"`
+			// 	Included float64 `json:"included"`
+			// } `json:"daypart"`
+			TaxPercentage StringFloat `json:"tax_percentage"`
+			Type          string      `json:"type"`
+			Min           int         `json:"min"`
 		} `json:"pricing"`
 		Images     []string `json:"images"`
 		Facilities []any    `json:"facilities"`
@@ -403,7 +404,7 @@ type Booking struct {
 	Discount            []any          `json:"discount"`
 	Slots               []BookingSlot  `json:"slots"`
 	Notes               string         `json:"notes,omitempty"`
-	Program             string         `json:"program,omitempty"`
+	Program             []any          `json:"program,omitempty"`
 	Currency            string         `json:"currency"`
 	Invoice             BookingInvoice `json:"invoice"`
 	CreatedOn           time.Time      `json:"created_on"`
