@@ -29,3 +29,24 @@ type Venue struct {
 }
 
 type Venues []Venue
+
+type Product struct {
+	ID          int      `json:"id"`
+	Title       string   `json:"title"`
+	Category    string   `json:"category"`
+	Component   string   `json:"component"`
+	Description string   `json:"description,omitempty"`
+	Activated   string   `json:"activated,omitempty"`
+	Images      []string `json:"images"`
+	Pricing     struct {
+		Unit          string `json:"unit"`
+		Included      int    `json:"included"`
+		Excluded      int    `json:"excluded"`
+		TaxPercentage int    `json:"tax_percentage"`
+	} `json:"pricing"`
+	Quantity  int    `json:"quantity,omitempty"`
+	Type      string `json:"type"`
+	Gradation any    `json:"gradation,omitempty"`
+}
+
+type Products []Product
