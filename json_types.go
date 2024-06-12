@@ -1,6 +1,9 @@
 package venuesuite
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type Date struct {
 	time.Time
@@ -16,4 +19,25 @@ type DateTime struct {
 
 func (d DateTime) MarshalSchema() string {
 	return d.Time.Format(time.RFC3339)
+}
+
+func (d *DateTime) UnmarshalJSON(text []byte) (err error) {
+	var value string
+	err = json.Unmarshal(text, &value)
+	if err != nil {
+		return err
+	}
+
+	if value == "" {
+		return nil
+	}
+
+	d.Time, err = time.Parse("2006-01-02 15:04:05", value)
+	if err == nil {
+		return nil
+	}
+
+	// lastly try standard date
+	d.Time, err = time.Parse(time.RFC3339, value)
+	return err
 }

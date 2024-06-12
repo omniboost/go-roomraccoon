@@ -150,3 +150,19 @@ type Space struct {
 }
 
 type Spaces []Space
+
+type AvailabilityEvents []AvailabilityEvent
+
+type AvailabilityEvent struct {
+	End              DateTime    `json:"end"`
+	ID               int         `json:"id"`
+	Source           string      `json:"source"`
+	SourceIdentifier interface{} `json:"source_identifier"`
+	Space            struct {
+		ID    int    `json:"id"`
+		Name  string `json:"name"`
+		Title string `json:"title"`
+	} `json:"space"`
+	Start DateTime `json:"start"`
+	Title string   `json:"title"`
+}
