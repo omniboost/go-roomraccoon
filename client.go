@@ -404,7 +404,7 @@ func checkContentType(response *http.Response) error {
 	return nil
 }
 
-func (c Client) Token() (string, error) {
+func (c *Client) Token() (string, error) {
 	if c.token == "" {
 		// retrieve token
 		req := c.NewAuthPost()
