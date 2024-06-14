@@ -375,7 +375,7 @@ type StatusResponse struct {
 func (r *StatusResponse) Error() string {
 	if r.Status != 0 && (r.Status < 200 || r.Status > 299) {
 		if r.Msg == r.Message {
-		return fmt.Sprintf("Status %d: %s", r.Status, r.Msg)
+			return fmt.Sprintf("Status %d: %s", r.Status, r.Msg)
 		}
 		return fmt.Sprintf("Status %d: %s %s", r.Status, r.Msg, r.Message)
 	}

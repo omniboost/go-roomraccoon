@@ -2,8 +2,15 @@ package venuesuite
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 )
+
+type CommaSeparatedQueryParam []string
+
+func (t CommaSeparatedQueryParam) MarshalSchema() string {
+	return strings.Join(t, ",")
+}
 
 type User struct {
 	ID        int       `json:"id"`

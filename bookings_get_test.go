@@ -17,7 +17,8 @@ func TestBookingsGet(t *testing.T) {
 	req.QueryParams().CreatedUntil = venuesuite.Date{time.Date(
 		2024, 6, 15, 0, 0, 0, 0, time.UTC,
 	)}
-	req.QueryParams().Status = []string{"request"}
+	req.QueryParams().Status = []string{"request", "booked"}
+	// req.QueryParams().Source = "3PY"
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
