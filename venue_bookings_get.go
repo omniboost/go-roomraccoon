@@ -36,17 +36,21 @@ func (r VenueBookingsGet) NewQueryParams() *VenueBookingsGetQueryParams {
 }
 
 type VenueBookingsGetQueryParams struct {
-	Status []string `schema:"status,omitempty"`
-	Start  Date     `schema:"period[start],omitempty"`
-	End    Date     `schema:"period[end],omitempty"`
-	Limit  int      `schema:"limit,omitempty"`
-	Page   int      `schema:"page,omitempty"`
+	Source       CommaSeparatedQueryParam `schema:"source,omitempty"`
+	Status       CommaSeparatedQueryParam `schema:"status,omitempty"`
+	PeriodStart  Date                     `schema:"period[start],omitempty"`
+	PeriodEnd    Date                     `schema:"period[end],omitempty"`
+	CreatedFrom  Date                     `schema:"created_from,omitempty"`
+	CreatedUntil Date                     `schema:"created_until,omitempty"`
+	Limit        int                      `schema:"limit,omitempty"`
+	Page         int                      `schema:"page,omitempty"`
 }
 
 func (p VenueBookingsGetQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
 	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
 	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(CommaSeparatedQueryParam{}, utils.EncodeSchemaMarshaler)
 	params := url.Values{}
 
 	err := encoder.Encode(p, params)

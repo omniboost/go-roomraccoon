@@ -19,10 +19,10 @@ func TestVenueBookingsGet(t *testing.T) {
 	}
 
 	req.PathParams().VenueID = venueID
-	req.QueryParams().Start = venuesuite.Date{time.Date(
+	req.QueryParams().CreatedFrom = venuesuite.Date{time.Date(
 		2024, 1, 1, 0, 0, 0, 0, time.UTC,
 	)}
-	req.QueryParams().End = venuesuite.Date{time.Date(
+	req.QueryParams().CreatedUntil = venuesuite.Date{time.Date(
 		2024, 5, 1, 0, 0, 0, 0, time.UTC,
 	)}
 	req.QueryParams().Status = []string{"draft", "booked"}
