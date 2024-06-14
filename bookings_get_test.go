@@ -11,13 +11,13 @@ import (
 
 func TestBookingsGet(t *testing.T) {
 	req := client.NewBookingsGet()
-	req.QueryParams().Start = venuesuite.Date{time.Date(
-		2024, 1, 1, 0, 0, 0, 0, time.UTC,
+	req.QueryParams().CreatedFrom = venuesuite.Date{time.Date(
+		2024, 6, 14, 0, 0, 0, 0, time.UTC,
 	)}
-	req.QueryParams().End = venuesuite.Date{time.Date(
-		2024, 5, 1, 0, 0, 0, 0, time.UTC,
+	req.QueryParams().CreatedUntil = venuesuite.Date{time.Date(
+		2024, 6, 15, 0, 0, 0, 0, time.UTC,
 	)}
-	req.QueryParams().Status = []string{"draft", "booked"}
+	req.QueryParams().Status = []string{"request"}
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)
