@@ -1,7 +1,6 @@
 package venuesuite
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -136,13 +135,6 @@ func (r *VenueBookingsGet) Do() (VenueBookingsGetResponseBody, error) {
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}
-
-	token, err := r.client.Token()
-	if err != nil {
-		return *r.NewResponseBody(), err
-	}
-
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)

@@ -15,13 +15,11 @@ var (
 
 func TestMain(m *testing.M) {
 	baseURLString := os.Getenv("BASE_URL")
-	user := os.Getenv("VENUESUITE_USER")
-	password := os.Getenv("VENUESUITE_PASSWORD")
+	token := os.Getenv("VENUESUITE_TOKEN")
 	debug := os.Getenv("DEBUG")
 
 	client = venuesuite.NewClient(nil)
-	client.SetUser(user)
-	client.SetPassword(password)
+	client.SetToken(token)
 	if debug != "" {
 		client.SetDebug(true)
 	}

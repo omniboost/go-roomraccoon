@@ -59,9 +59,7 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	user     string
-	password string
-	token    string
+	token string
 
 	// User agent for client
 	userAgent string
@@ -92,20 +90,12 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-func (c Client) User() string {
-	return c.user
+func (c Client) Token() string {
+	return c.token
 }
 
-func (c *Client) SetUser(user string) {
-	c.user = user
-}
-
-func (c Client) Password() string {
-	return c.password
-}
-
-func (c *Client) SetPassword(password string) {
-	c.password = password
+func (c *Client) SetToken(token string) {
+	c.token = token
 }
 
 func (c Client) BaseURL() url.URL {
@@ -213,6 +203,7 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
 	r.Header.Add("Accept", c.MediaType())
 	r.Header.Add("User-Agent", c.UserAgent())
+	r.Header.Add("X-AUTH-TOKEN", c.Token())
 
 	return r, nil
 }
@@ -402,18 +393,4 @@ func checkContentType(response *http.Response) error {
 	}
 
 	return nil
-}
-
-func (c *Client) Token() (string, error) {
-	if c.token == "" {
-		// retrieve token
-		req := c.NewAuthPost()
-		resp, err := req.Do()
-		if err != nil {
-			return "", err
-		}
-		c.token = resp.Token
-	}
-
-	return c.token, nil
 }
