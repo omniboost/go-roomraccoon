@@ -227,20 +227,22 @@ type BookingSlot struct {
 			BasePricePerPerson  int        `json:"base_price_per_person"`
 			TotalPricePerPerson int        `json:"total_price_per_person"`
 		} `json:"quote"`
-		Quantity int `json:"quantity"`
+		Quantity   int       `json:"quantity"`
+		ExternalID IntString `json:"external_id"`
 	} `json:"packages"`
 	Catering []struct {
-		ID          int      `json:"id"`
-		Title       string   `json:"title"`
-		Category    string   `json:"category"`
-		Component   string   `json:"component"`
-		Gradation   any      `json:"gradation"`
-		Description string   `json:"description"`
-		Images      []string `json:"images"`
-		Pricing     Pricing  `json:"pricing"`
-		Activated   any      `json:"activated"`
-		Type        string   `json:"type"`
-		Quantity    int      `json:"quantity"`
+		ID          int       `json:"id"`
+		Title       string    `json:"title"`
+		Category    string    `json:"category"`
+		Component   string    `json:"component"`
+		Gradation   any       `json:"gradation"`
+		Description string    `json:"description"`
+		Images      []string  `json:"images"`
+		Pricing     Pricing   `json:"pricing"`
+		Activated   any       `json:"activated"`
+		Type        string    `json:"type"`
+		Quantity    int       `json:"quantity"`
+		ExternalID  IntString `json:"external_id"`
 	} `json:"catering"`
 	Equipment []struct {
 		ID          int      `json:"id"`
@@ -303,7 +305,8 @@ type BookingSlot struct {
 			Min   int    `json:"min"`
 			Max   int    `json:"max"`
 		} `json:"setups"`
-		LinkedSpaces []any `json:"linked_spaces"`
+		LinkedSpaces []any     `json:"linked_spaces"`
+		ExternalID   IntString `json:"external_id"`
 	} `json:"spaces"`
 	Program []any `json:"program"`
 }
