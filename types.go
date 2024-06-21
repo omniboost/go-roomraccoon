@@ -465,3 +465,20 @@ type Booking struct {
 }
 
 type Bookings []Booking
+
+type BookingActivity struct {
+	ID   int `json:"id"`
+	User struct {
+		ID     int    `json:"id"`
+		Name   string `json:"name"`
+		Avatar string `json:"avatar"`
+	} `json:"user"`
+	Action  string `json:"action"`
+	Changes struct {
+		ID      int    `json:"id"`
+		Content string `json:"content"`
+	} `json:"changes"`
+	CreatedOn time.Time `json:"created_on"`
+}
+
+type BookingActivities []BookingActivity
