@@ -482,3 +482,15 @@ type BookingActivity struct {
 }
 
 type BookingActivities []BookingActivity
+
+type BookingNote struct {
+	ID   int `json:"id"`
+	User struct {
+		ID        int    `json:"id"`
+		Avatar    string `json:"avatar"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+	} `json:"user"`
+	Content   string    `json:"content"`
+	CreatedOn time.Time `json:"created_on"`
+}
