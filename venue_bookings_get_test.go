@@ -1,4 +1,4 @@
-package venuesuite_test
+package roomraccoon_test
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/omniboost/go-venuesuite"
+	"github.com/omniboost/go-roomraccoon"
 )
 
 func TestVenueBookingsGet(t *testing.T) {
@@ -19,10 +19,10 @@ func TestVenueBookingsGet(t *testing.T) {
 	}
 
 	req.PathParams().VenueID = venueID
-	req.QueryParams().CreatedFrom = venuesuite.Date{time.Date(
+	req.QueryParams().CreatedFrom = roomraccoon.Date{time.Date(
 		2024, 1, 1, 0, 0, 0, 0, time.UTC,
 	)}
-	req.QueryParams().CreatedUntil = venuesuite.Date{time.Date(
+	req.QueryParams().CreatedUntil = roomraccoon.Date{time.Date(
 		2024, 5, 1, 0, 0, 0, 0, time.UTC,
 	)}
 	req.QueryParams().Status = []string{"draft", "booked"}

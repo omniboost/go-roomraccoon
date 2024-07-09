@@ -1,4 +1,4 @@
-package venuesuite
+package roomraccoon
 
 import (
 	"bytes"
@@ -19,7 +19,7 @@ import (
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-venuesuite/" + libraryVersion
+	userAgent      = "go-roomraccoon/" + libraryVersion
 	mediaType      = "application/json"
 	charset        = "utf-8"
 )
@@ -27,7 +27,7 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "api-vms.qa.venuesuite.com",
+		Host:   "api-vms.qa.roomraccoon.com",
 		Path:   "",
 	}
 )

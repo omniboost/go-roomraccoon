@@ -1,11 +1,11 @@
-package venuesuite
+package roomraccoon
 
 import (
 	"net/http"
 	"net/url"
 	"strconv"
 
-	"github.com/omniboost/go-venuesuite/utils"
+	"github.com/omniboost/go-roomraccoon/utils"
 )
 
 func (c *Client) NewAvailabilityEventsGet() AvailabilityEventsGet {

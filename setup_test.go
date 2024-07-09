@@ -1,4 +1,4 @@
-package venuesuite_test
+package roomraccoon_test
 
 import (
 	"log"
@@ -6,11 +6,11 @@ import (
 	"os"
 	"testing"
 
-	venuesuite "github.com/omniboost/go-venuesuite"
+	roomraccoon "github.com/omniboost/go-roomraccoon"
 )
 
 var (
-	client *venuesuite.Client
+	client *roomraccoon.Client
 )
 
 func TestMain(m *testing.M) {
@@ -18,7 +18,7 @@ func TestMain(m *testing.M) {
 	token := os.Getenv("VENUESUITE_TOKEN")
 	debug := os.Getenv("DEBUG")
 
-	client = venuesuite.NewClient(nil)
+	client = roomraccoon.NewClient(nil)
 	client.SetToken(token)
 	if debug != "" {
 		client.SetDebug(true)

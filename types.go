@@ -1,4 +1,4 @@
-package venuesuite
+package roomraccoon
 
 import (
 	"encoding/json"

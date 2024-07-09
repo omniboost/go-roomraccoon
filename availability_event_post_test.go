@@ -1,4 +1,4 @@
-package venuesuite_test
+package roomraccoon_test
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/omniboost/go-venuesuite"
+	"github.com/omniboost/go-roomraccoon"
 )
 
 func TestAvailabilityEventPost(t *testing.T) {
@@ -19,10 +19,10 @@ func TestAvailabilityEventPost(t *testing.T) {
 
 	req := client.NewAvailabilityEventPost()
 	req.PathParams().VenueID = venueID
-	req.RequestBody().Start = venuesuite.DateTime{time.Date(
+	req.RequestBody().Start = roomraccoon.DateTime{time.Date(
 		2024, 6, 12, 14, 21, 0, 0, time.UTC,
 	)}
-	req.RequestBody().End = venuesuite.DateTime{time.Date(
+	req.RequestBody().End = roomraccoon.DateTime{time.Date(
 		2024, 6, 12, 18, 0, 0, 0, time.UTC,
 	)}
 	req.RequestBody().Title = "Test event"

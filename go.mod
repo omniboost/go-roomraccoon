@@ -1,4 +1,4 @@
-module github.com/omniboost/go-venuesuite
+module github.com/omniboost/go-roomraccoon
 
 go 1.22
 
