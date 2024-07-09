@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"strconv"
 	"testing"
 
 	roomraccoon "github.com/omniboost/go-roomraccoon"
@@ -14,12 +15,17 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	baseURLString := os.Getenv("BASE_URL")
-	token := os.Getenv("VENUESUITE_TOKEN")
+	baseURLString := os.Getenv("ROOMRACCOON_BASE_URL")
+	apiKey := os.Getenv("ROOMRACCOON_API_KEY")
+	hotelID, err := strconv.Atoi(os.Getenv("ROOMRACCOON_HOTEL_ID"))
+	if err != nil {
+		log.Fatal(err)
+	}
 	debug := os.Getenv("DEBUG")
 
 	client = roomraccoon.NewClient(nil)
-	client.SetToken(token)
+	client.SetApiKey(apiKey)
+	client.SetHotelID(hotelID)
 	if debug != "" {
 		client.SetDebug(true)
 	}

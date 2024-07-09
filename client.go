@@ -27,7 +27,7 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "api-vms.qa.roomraccoon.com",
+		Host:   "api.roomraccoon.com",
 		Path:   "",
 	}
 )
@@ -59,7 +59,8 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	token string
+	apiKey  string
+	hotelID int
 
 	// User agent for client
 	userAgent string
@@ -90,12 +91,20 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-func (c Client) Token() string {
-	return c.token
+func (c Client) ApiKey() string {
+	return c.apiKey
 }
 
-func (c *Client) SetToken(token string) {
-	c.token = token
+func (c *Client) SetApiKey(apiKey string) {
+	c.apiKey = apiKey
+}
+
+func (c Client) HotelID() int {
+	return c.hotelID
+}
+
+func (c *Client) SetHotelID(hotelID int) {
+	c.hotelID = hotelID
 }
 
 func (c Client) BaseURL() url.URL {
@@ -203,7 +212,6 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 	r.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
 	r.Header.Add("Accept", c.MediaType())
 	r.Header.Add("User-Agent", c.UserAgent())
-	r.Header.Add("X-AUTH-TOKEN", c.Token())
 
 	return r, nil
 }
@@ -216,7 +224,7 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		c.beforeRequestDo(c.http, req, body)
 	}
 
-	if c.debug == true {
+	if c.debug {
 		dump, _ := httputil.DumpRequestOut(req, true)
 		log.Println(string(dump))
 	}
@@ -237,7 +245,7 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		}
 	}()
 
-	if c.debug == true {
+	if c.debug {
 		dump, _ := httputil.DumpResponse(httpResp, true)
 		log.Println(string(dump))
 	}
@@ -255,15 +263,15 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 		return httpResp, nil
 	}
 
-	status := &StatusResponse{Response: httpResp}
+	errorResponse := &ErrorResponse{Response: httpResp}
 	// exResp := &ExceptionResponse{Response: httpResp}
-	err = c.Unmarshal(httpResp.Body, []any{body}, []any{status})
+	err = c.Unmarshal(httpResp.Body, []any{body}, []any{errorResponse})
 	if err != nil {
 		return httpResp, err
 	}
 
-	if status.Error() != "" {
-		return httpResp, status
+	if errorResponse.Error() != "" {
+		return httpResp, errorResponse
 	}
 
 	// check if the response isn't an error
@@ -354,42 +362,27 @@ func CheckResponse(r *http.Response) error {
 	return nil
 }
 
-type StatusResponse struct {
-	// HTTP response that caused this error
-	Response *http.Response
-
-	Status  int    `json:"status"`
-	Msg     string `json:"msg"`
-	Message string `json:"message"`
-}
-
-func (r *StatusResponse) Error() string {
-	if r.Status != 0 && (r.Status < 200 || r.Status > 299) {
-		if r.Msg == r.Message {
-			return fmt.Sprintf("Status %d: %s", r.Status, r.Msg)
-		}
-		return fmt.Sprintf("Status %d: %s %s", r.Status, r.Msg, r.Message)
-	}
-
-	return ""
-}
-
 type ErrorResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response
 
-	Message string `json:"Message"`
+	Message string `json:"message"`
+	Success bool   `json:"success"`
 }
 
 func (r *ErrorResponse) Error() string {
+	if r.Success {
+		return ""
+	}
 	return r.Message
+
 }
 
 func checkContentType(response *http.Response) error {
 	header := response.Header.Get("Content-Type")
 	contentType := strings.Split(header, ";")[0]
 	if contentType != mediaType {
-		return fmt.Errorf("Expected Content-Type \"%s\", got \"%s\"", mediaType, contentType)
+		return fmt.Errorf("expected content-type \"%s\", got \"%s\"", mediaType, contentType)
 	}
 
 	return nil

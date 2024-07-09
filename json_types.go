@@ -1,4 +1,4 @@
-package venuesuite
+package roomraccoon
 
 import (
 	"encoding/json"
@@ -27,7 +27,7 @@ func (d *Date) MarshalJSON() ([]byte, error) {
 		return json.Marshal(nil)
 	}
 
-	return json.Marshal(d.Time.Format("2006-01-02 15:04:05"))
+	return json.Marshal(d.Time.Format("2006-01-02"))
 }
 
 func (d *DateTime) UnmarshalJSON(text []byte) (err error) {
@@ -42,6 +42,26 @@ func (d *DateTime) UnmarshalJSON(text []byte) (err error) {
 	}
 
 	d.Time, err = time.Parse("2006-01-02 15:04:05", value)
+	if err == nil {
+		return nil
+	}
+
+	// lastly try standard date
+	d.Time, err = time.Parse(time.RFC3339, value)
+	return err
+}
+func (d *Date) UnmarshalJSON(text []byte) (err error) {
+	var value string
+	err = json.Unmarshal(text, &value)
+	if err != nil {
+		return err
+	}
+
+	if value == "" {
+		return nil
+	}
+
+	d.Time, err = time.Parse("2006-01-02", value)
 	if err == nil {
 		return nil
 	}
