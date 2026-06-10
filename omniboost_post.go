@@ -163,12 +163,12 @@ type OmniboostPostResponseBody struct {
 			ReservationNumber string `json:"reservationNumber"`
 		} `json:"reservation"`
 		Debtor struct {
-			Name            string `json:"name"`
-			Email           string `json:"email"`
-			UniqueID        string `json:"uniqueId"`
-			Gender          string `json:"gender"`
-			TelephoneNumber string `json:"telephoneNumber"`
-			Ascription      string `json:"ascription"`
+			Name            string    `json:"name"`
+			Email           string    `json:"email"`
+			UniqueID        IntString `json:"uniqueId"`
+			Gender          string    `json:"gender"`
+			TelephoneNumber string    `json:"telephoneNumber"`
+			Ascription      string    `json:"ascription"`
 		} `json:"debtor,omitempty"`
 		DebtorCode string `json:"debtorCode"`
 	} `json:"data"`
